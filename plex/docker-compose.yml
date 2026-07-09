@@ -1,0 +1,28 @@
+services:
+  plex:
+    image: lscr.io/linuxserver/plex:latest
+    container_name: plex
+    network_mode: host
+    #expose:
+    #  - "32400"
+    #networks:
+    #  - caddy-internal-bridge # To be accessible via Caddy reverse proxy
+    #ports:
+    #  - "32400:32400"
+    environment:
+      - PUID=1000                # Replace with your user ID (run `id your_user`)
+      - PGID=1000                # Replace with your group ID
+      - TZ=Australia/Brisbane
+      - VERSION=docker
+      - PLEX_CLAIM=claim-FRxEi8sE-xAFjPt89iEo              # Optional: get a 4‑minute token from https://plex.tv/claim
+    volumes:
+      - ./library:/config   # Plex database and metadata
+      - /home/hyperv/volumes/CHANHOMEDS/plex/tv_show:/tv                  # TV shows
+      - /home/hyperv/volumes/CHANHOMEDS/plex/movie:/movies          # Movies
+      - /home/hyperv/volumes/CHANHOMEDS/plex/ethan_music:/ethan_music  
+      # Add additional media volumes as needed
+    restart: unless-stopped
+    # Optional hardware acceleration:
+    # devices:
+    #   - /dev/dri:/dev/dri              # Intel/AMD QuickSync
+    # runtime: nvidia                     # Nvidia GPU (requires nvidia-container-toolkit)

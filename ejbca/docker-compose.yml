@@ -1,0 +1,43 @@
+services:
+  ejbca-database:
+    container_name: ejbca-database
+    image: "library/mariadb:latest"
+    networks:
+      - ejbca-internal-bridge
+    environment:
+      - MYSQL_ROOT_PASSWORD=foo123
+      - MYSQL_DATABASE=ejbca
+      - MYSQL_USER=ejbca
+      - MYSQL_PASSWORD=ejbca
+    volumes:
+      - ./datadbdir:/var/lib/mysql:rw
+    restart: unless-stopped
+
+  ejbca:
+    hostname: ca.digisign.qzz.io
+    container_name: ejbca
+    image: keyfactor/ejbca-ce:latest
+    depends_on:
+      - ejbca-database
+    networks:
+      - caddy-internal-bridge # To be accessible via Caddy reverse proxy
+      - ejbca-internal-bridge # For database communication
+    environment:
+      - DATABASE_JDBC_URL=jdbc:mariadb://ejbca-database:3306/ejbca?characterEncoding=UTF-8
+      - LOG_LEVEL_APP=INFO
+      - LOG_LEVEL_SERVER=INFO
+      - TLS_SETUP_ENABLED=true
+      - PROXY_HTTP_BIND="0.0.0.0"
+    expose:
+      - "8082"
+      - "8081"
+    #  - "8443"
+    #  - "8080"
+    #ports:
+    #  - "8964:8080"
+    #  - "8965:8443"
+    restart: unless-stopped
+
+networks:
+  ejbca-internal-bridge:
+    driver: bridge

@@ -1,0 +1,26 @@
+services:
+  dns-server:
+    container_name: dns-server
+    hostname: dns-server
+    image: technitium/dns-server:latest
+    network_mode: "host"
+    volumes:
+      - ./config:/etc/dns
+    restart: unless-stopped
+
+    # ===== HOME 5-USER SETTINGS =====
+    # Prevents it from accidentally eating all your CPU if it glitches (hard cap)
+    cpus: "1.0"
+    
+    # Prevents memory leaks from crashing your whole server (hard cap)
+    mem_limit: 512M
+    
+    # Soft reservation: keeps a little RAM guaranteed for it
+    mem_reservation: 256M
+
+    # Give it standard priority (no need to starve other containers)
+    cpu_shares: 1024
+
+    # Keep this to avoid port exhaustion if you have many devices (phones, TVs, IoT)
+#    sysctls:
+#      - net.ipv4.ip_local_port_range=1024 65535

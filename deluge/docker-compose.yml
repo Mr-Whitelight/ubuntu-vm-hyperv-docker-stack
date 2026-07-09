@@ -1,0 +1,21 @@
+services:
+  deluge:
+    image: lscr.io/linuxserver/deluge:latest
+    container_name: deluge
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Asia/Hong_Kong
+      - DELUGE_LOGLEVEL=error #optional
+    volumes:
+      - ./config:/config
+      - /home/hyperv/volumes/CHANHOMEDS/torrent/content:/downloads
+    expose:
+      - "8112"
+    ports:
+      - 6881:6881
+      - 6881:6881/udp
+      - 58846:58846 #optional
+    networks:
+      - caddy-internal-bridge
+    restart: unless-stopped

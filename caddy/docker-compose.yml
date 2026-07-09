@@ -1,0 +1,30 @@
+services:
+  caddy:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: caddy-cloudflare:latest
+    container_name: caddy-proxy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - ./certs:/root/certs
+      - ./site:/srv
+      - ./caddy_data:/data
+      - ./caddy_config:/config
+    environment:
+      - ACME_AGREE=true
+    networks:
+      - caddy-internal-bridge
+
+#volumes:
+#  caddy_data:
+#  caddy_config:
+
+networks:
+  caddy-internal-bridge:
+    driver: bridge

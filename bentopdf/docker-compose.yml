@@ -1,0 +1,9 @@
+services:
+  bentopdf:
+    image: bentopdf/bentopdf-simple:latest
+    container_name: bentopdf
+    networks:
+      - caddy-internal-bridge
+    expose:
+      - "8080"
+    restart: unless-stopped

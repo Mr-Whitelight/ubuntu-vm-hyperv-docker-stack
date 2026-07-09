@@ -1,0 +1,41 @@
+services:
+  snipeit:
+    image: snipe/snipe-it:v8.4.0
+    container_name: snipeit
+    restart: unless-stopped
+    volumes:
+      - ./snipeit_storage:/var/lib/snipeit
+    expose:
+      - "80"
+    networks:
+      - caddy-internal-bridge
+    depends_on:
+      snipeit-db:
+        condition: service_healthy
+        restart: true
+    env_file:
+      - .env
+
+  snipeit-db:
+    image: mariadb:latest
+    container_name: snipeit-db
+    restart: unless-stopped
+    volumes:
+      - ./snipeit_db_data:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    networks:
+      - caddy-internal-bridge
+    healthcheck:
+      # https://mariadb.com/kb/en/using-healthcheck-sh/#compose-file-example
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 1s
+      retries: 5
+
+#volumes:
+#  snipeit-db_data:
+#  snipeit-storage:

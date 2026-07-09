@@ -1,0 +1,16 @@
+include:
+  - caddy/docker-compose.yml
+  - authentik/docker-compose.yml
+  - portainer/docker-compose.yml
+  - bentopdf/docker-compose.yml
+  - deluge/docker-compose.yml
+  - immich-app/docker-compose.yml
+  - nextcloud/docker-compose.yml
+  - paperless/docker-compose.yml
+  - dns-server/docker-compose.yml
+  - ejbca/docker-compose.yml
+  - snipeit/docker-compose.yml
+  - excalidraw/docker-compose.yml
+  - wordpress/docker-compose.yml
+  - plex/docker-compose.yml
+  - booklore/docker-compose.yml

@@ -1,0 +1,26 @@
+# -----------------------------------------------------
+# RULE 1: IGNORE EVERYTHING (files AND directories)
+# -----------------------------------------------------
+*
+
+# -----------------------------------------------------
+# RULE 2: BUT DO NOT IGNORE DIRECTORIES
+# This allows Git to walk into bentopdf/, plex/, etc.
+# -----------------------------------------------------
+!*/
+
+# -----------------------------------------------------
+# RULE 3: NOW TRACK ONLY .yml FILES inside those directories
+# -----------------------------------------------------
+!*.yml
+!*.yaml
+
+# -----------------------------------------------------
+# RULE 4: TRACK THIS .gitignore FILE ITSELF
+# -----------------------------------------------------
+!.gitignore
+
+# (Optional: Track a template .env if you create one later)
+# !.env.example
+
+
